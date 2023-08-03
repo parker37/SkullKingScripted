@@ -1,1 +1,1 @@
-<Button onClick="start" width="150" height="75" position="600 500 0" fontSize="26">Start</Button>
+<Button onClick="start" width="150" height="75" position="600 500 0" fontSize="26" id="startButton">Start</Button>

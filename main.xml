@@ -1,1 +1,2 @@
+<Include src="start.xml"/>
 <Button onClick="ready" width="100" height="50" position="900 0 0" fontsize="20">Lock In</Button> 
