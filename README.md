@@ -8,10 +8,10 @@
 ## Setup:
 - [x] select cards that we're playing with
 - [x] gather cards and shuffle
-- [ ] get players/colors
+- [x] get players/colors
 - [x] remove other cards and bidding chips
-- [ ] get rid of setup card zone
-- [ ] deal 1 card to everyone
+- [x] get rid of setup card zone
+- [x] deal 1 card to everyone
 - [ ] create card play box
 - [ ] write in notes, players and starting score (0)
 
