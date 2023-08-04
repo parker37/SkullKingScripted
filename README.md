@@ -13,7 +13,7 @@
 - [x] get rid of setup card zone
 - [x] deal 1 card to everyone
 - [ ] create card play box
-- [ ] write in notes, players and starting score (0)
+- [x] write in notes, players and starting score (0)
 
 ## Play:
 ### Round:
@@ -23,15 +23,9 @@
 - [ ] bidding, players set bid, then hit lock in button
 - [ ] check that every player is locked in, then flip bids
 - [ ] print name to chat of who has locked in
+- [ ] end round button appears when everyone is out of cards
 - [ ] count number of tricks player has won
-### Trick:
-- [ ] who starts the trick
-- [ ] what order cards are played
-- [ ] first color played
-- [ ] card rules as they happen
-- [ ] indicate color of round
-- [ ] pop up buttons for choices (loot, monkey, etc)
-- [ ] determine winner of trick
+- [ ] bonus points
 
 ## Scoring:
 - [ ] calculate bids and tricks won
