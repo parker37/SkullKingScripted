@@ -1,4 +1,4 @@
-notes = {}
+local notes = {}
 
 function notes.update(players, roundNum)
     message = ""

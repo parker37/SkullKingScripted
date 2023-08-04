@@ -40,7 +40,6 @@ function setup()
 
     -- deletes start game ui button and starting zone
     self.UI.setAttribute("startButton", "active", false)
-    getObjectFromGUID("fe0fde").destruct()
     
     -- gets players currently in game
     for _,player in ipairs(Player.getPlayers()) do
