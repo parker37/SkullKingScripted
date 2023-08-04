@@ -4,16 +4,15 @@ game = require("start")
 notes = require("notes")
 
 startGame = coroutine.create(function ()
-    print("In game loop. Before coroutine yield")
+    -- pauses code
     coroutine.yield()
-    print("In game loop.")
+    -- resumes after start button is pressed
 
     startRound()
-    --deck.getDeck()
-    --print(mainDeck.deck)
 end)
 
 function onLoad()
+    -- starts game coroutine
     coroutine.resume(startGame)
 end
 
