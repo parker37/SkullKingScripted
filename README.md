@@ -22,7 +22,9 @@
 - [ ] bidding, players set bid, then hit lock in button
 - [ ] check that every player is locked in, then flip bids
 - [ ] print name to chat of who has locked in
+- [ ] end round button appears when everyone is out of cards
 - [ ] count number of tricks player has won
+- [ ] bonus points
 
 ## Scoring:
 - [ ] calculate bids and tricks won
