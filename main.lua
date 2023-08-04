@@ -10,17 +10,31 @@ startGame = coroutine.create(function ()
     coroutine.yield()
     -- resumes after start button is pressed
 
-    startRound()
+    -- pregame setup
+    setScore()
+
+    -- start game
+    while (game.round <= 10) do
+        startRound()
+        endRound()
+    end
 end)
 
 function onLoad()
+    -- print game rules message
+
     -- starts game coroutine
     coroutine.resume(startGame)
 end
 
 function startRound()
+    -- deal cards for each round
     game.deal()
-    setScore()
+    
+end
+
+function endRound()
+    
 end
 
 function setScore()

@@ -17,9 +17,8 @@
 
 ## Play:
 ### Round:
-- [ ] read whose turn it is
 - [ ] determine what round it is
-- [ ] deal amount cards depending on round number
+- [x] deal amount cards depending on round number
 - [ ] bidding, players set bid, then hit lock in button
 - [ ] check that every player is locked in, then flip bids
 - [ ] print name to chat of who has locked in

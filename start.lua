@@ -41,7 +41,7 @@ function setup()
     -- deletes start game ui button and starting zone
     self.UI.setAttribute("startButton", "active", false)
     
-    -- gets players currently in game
+    -- gets players currently in game with color, steam_name, and set a score
     for _,player in ipairs(Player.getPlayers()) do
         if (player.color ~= "Grey" and player.color ~= "Black") then
             start.players[player.steam_name] = {
@@ -51,10 +51,12 @@ function setup()
         end
     end
 
+    -- sets round to 1
     start.round = 1
 
+    -- continues running startGame code
     coroutine.resume(startGame)
 end
 
-
+-- return start table of data to other files
 return start
