@@ -6,7 +6,6 @@ function notes.update(players, roundNum)
 
     for name, data in pairs(players) do
         message = message .. name .. ": " .. tostring(data.score) .. "\n"
-        printToAll(message, data.color)
     end
 
     setNotes(round .. message)

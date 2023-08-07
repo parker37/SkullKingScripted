@@ -5,16 +5,19 @@ local start = {}
 start.deck = {}
 start.players = {}
 start.round = 0
+start.colors = {}
+
 
 -- deals cards to players based on the round number
-function start.deal() 
+function start.deal()
     start.deck.deal(start.round)
 end
 
 function setup()
     -- gets all cards from starting zone
     cardZone = getObjectFromGUID("fe0fde").getObjects()
-        
+    tokens = getObjectsWithTag("token")
+
     -- creates table for player selected cards
     selectedCards = {}
 
@@ -22,11 +25,13 @@ function setup()
     for _,cards in ipairs(cardZone) do
 
         -- adds face down cards to selected cards table
-        if (cards.is_face_down) then
-            table.insert(selectedCards, cards)
-        else
-            -- deletes cards that aren't used in the game
-            cards.destruct()
+        if (cards.hasTag("Card")) then
+            if (cards.is_face_down) then
+                table.insert(selectedCards, cards)
+            else
+                -- deletes cards that aren't used in the game
+                cards.destruct()
+           end
         end
     end
     
@@ -38,8 +43,9 @@ function setup()
     start.deck.shuffle()
     start.deck.setPosition(getObjectFromGUID(180886).getPosition())
 
-    -- deletes start game ui button and starting zone
+    -- deletes start game ui button and adds lock in button
     self.UI.setAttribute("startButton", "active", false)
+    self.UI.setAttribute("lockInButton", "active", true)
     
     -- gets players currently in game with color, steam_name, and set a score
     for _,player in ipairs(Player.getPlayers()) do
@@ -48,6 +54,13 @@ function setup()
                 score = 0, 
                 color = player.color
             }
+            start.colors[player.color] = true
+        end
+    end
+
+    for _, t in ipairs(tokens) do
+        if (start.colors[t.getTags()[2]]==nil) then
+            t.destruct()
         end
     end
 

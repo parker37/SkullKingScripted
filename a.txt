@@ -1,3 +1,50 @@
+-- Bundled by luabundle {"rootModuleName":"Global.-1.lua","version":"1.6.0"}
+local __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)
+	local loadingPlaceholder = {[{}] = true}
+
+	local register
+	local modules = {}
+
+	local require
+	local loaded = {}
+
+	register = function(name, body)
+		if not modules[name] then
+			modules[name] = body
+		end
+	end
+
+	require = function(name)
+		local loadedModule = loaded[name]
+
+		if loadedModule then
+			if loadedModule == loadingPlaceholder then
+				return nil
+			end
+		else
+			if not modules[name] then
+				if not superRequire then
+					local identifier = type(name) == 'string' and '\"' .. name .. '\"' or tostring(name)
+					error('Tried to require ' .. identifier .. ', but no such module has been registered')
+				else
+					return superRequire(name)
+				end
+			end
+
+			loaded[name] = loadingPlaceholder
+			loadedModule = modules[name](require, loaded, register, modules)
+			loaded[name] = loadedModule
+		end
+
+		return loadedModule
+	end
+
+	return require, loaded, register, modules
+end)(nil)
+__bundle_register("Global.-1.lua", function(require, _LOADED, __bundle_register, __bundle_modules)
+require("main")
+end)
+__bundle_register("main", function(require, _LOADED, __bundle_register, __bundle_modules)
 deckZoneGUID = "180886"
 tokenZoneGUID = "bea601"
 centerZoneGUID = "fe0fde"
@@ -43,24 +90,18 @@ function endRound()
     -- sets score
     setScore()
 
-    -- searches all snap points
     snapPoints = Global.getSnapPoints()
     for _, sP in ipairs(snapPoints) do
-        -- finds the discard pile snap point
-        if (sP.tags[1] == "card" and sP.tags[2] == "Discard") then
-            -- adds that snap point to a seperate variable to use for position and rotation
-            snapPoint = sP
-        end
+        log(sP)
     end
 
     -- check trick win piles for tricks and move them to discard
     for _, x in ipairs(trickZones) do
         tricks = getObjectFromGUID(x).getObjects()
         if (#tricks > 0) then
-            -- set position and rotation to discard snap point
-            -- 0 to make sure it is flipped up
-            tricks[1].setPosition({snapPoint.position[1],snapPoint.position[2],snapPoint.position[3]})
-            tricks[1].setRotation({snapPoint.rotation[1],snapPoint.rotation[2],0})
+            --tricks[1].setPosition(getObjectFromGUID(discardZoneGUID).getPosition())
+            --tricks[1].setPosition({snapPoint.position[1],snapPoint.position[2],snapPoint.position[3]})
+            --tricks[1].setRotation({snapPoint.rotation[1],snapPoint.rotation[2],0})
         end
     end
 
@@ -101,7 +142,7 @@ function endRound()
                         startRound()
                     end,
                     0.5)
-            end,
+           end,
             0.7)
         end,
         0.5)
@@ -150,10 +191,9 @@ function claimTrick(player)
     snapPoints = Global.getSnapPoints()
     -- iterates through all the player won trick zones
     for _, snapPoint in ipairs(snapPoints) do
+        print(snapPoint.tags[1] .. " " .. snapPoint.tags[2])
         -- for each snap point, it checks if the color tag matches the color player for who pressed the button
-        if ((snapPoint.tags[2] == player.color or snapPoint.tags[1] == player.color) 
-        and (snapPoint.tags[2] == "card" or snapPoint.tags[1] == "card")) then
-
+        if ((snapPoint.tags[2] == player.color or snapPoint.tags[1] == player.color) and (snapPoint.tags[2] == "card" or snapPoint.tags[1] == "card")) then
             -- if it does, move the card deck to that zone
             g[1].setPosition({snapPoint.position[1],snapPoint.position[2],snapPoint.position[3]})
             g[1].setRotation({snapPoint.rotation[1],snapPoint.rotation[2],0})
@@ -185,16 +225,6 @@ function trashTrick()
     hands = Hands.getHands()
     cards = {}
 
-    -- searches all snap points
-    snapPoints = Global.getSnapPoints()
-    for _, sP in ipairs(snapPoints) do
-        -- finds the discard pile snap point
-        if (sP.tags[1] == "card" and sP.tags[2] == "Discard") then
-            -- adds that snap point to a seperate variable to use for position and rotation
-            snapPoint = sP
-        end
-    end
-
     -- searches all objects in the zone and gets the ones that are cards
     for _, obj in ipairs(objects) do
         if (obj.hasTag("Card")) then
@@ -211,8 +241,7 @@ function trashTrick()
 
     -- groups the cards and moves them to discard stack
     g = group(cards)
-    g[1].setPosition({snapPoint.position[1],snapPoint.position[2],snapPoint.position[3]})
-    g[1].setRotation({snapPoint.rotation[1],snapPoint.rotation[2],0})
+    g[1].setPosition(trash.getPosition())
 
     -- checks that all players are out of cards, if they aren't, end function
     for _, hand in ipairs(hands) do
@@ -260,3 +289,108 @@ function lockIn(player)
     broadcastToAll("YO HO HO")
     self.UI.setAttribute("lockInButton", "active", false)
 end
+end)
+__bundle_register("scores", function(require, _LOADED, __bundle_register, __bundle_modules)
+local scores = {}
+
+function scores.score()
+    
+end
+
+return scores
+end)
+__bundle_register("notes", function(require, _LOADED, __bundle_register, __bundle_modules)
+local notes = {}
+
+function notes.update(players, roundNum)
+    message = ""
+    round = "Round " .. tostring(roundNum) .. "\n-----------\n\n"
+
+    for name, data in pairs(players) do
+        message = message .. name .. ": " .. tostring(data.score) .. "\n"
+    end
+
+    setNotes(round .. message)
+
+end
+
+return notes
+end)
+__bundle_register("start", function(require, _LOADED, __bundle_register, __bundle_modules)
+-- creates main object of game
+local start = {}
+
+-- declaring variables for use during game
+start.deck = {}
+start.players = {}
+start.round = 0
+start.colors = {}
+
+
+-- deals cards to players based on the round number
+function start.deal()
+    start.deck.deal(start.round)
+end
+
+function setup()
+    -- gets all cards from starting zone
+    cardZone = getObjectFromGUID("fe0fde").getObjects()
+    tokens = getObjectsWithTag("token")
+
+    -- creates table for player selected cards
+    selectedCards = {}
+
+    -- loops through all objects in card zone
+    for _,cards in ipairs(cardZone) do
+
+        -- adds face down cards to selected cards table
+        if (cards.hasTag("Card")) then
+            if (cards.is_face_down) then
+                table.insert(selectedCards, cards)
+            else
+                -- deletes cards that aren't used in the game
+                cards.destruct()
+           end
+        end
+    end
+    
+    -- groups all selected cards to one stack
+    deck = group(selectedCards)
+
+    -- gets card deck, shuffles it, and moves it to the game deck zone
+    start.deck = deck[1]
+    start.deck.shuffle()
+    start.deck.setPosition(getObjectFromGUID(180886).getPosition())
+
+    -- deletes start game ui button and adds lock in button
+    self.UI.setAttribute("startButton", "active", false)
+    self.UI.setAttribute("lockInButton", "active", true)
+    
+    -- gets players currently in game with color, steam_name, and set a score
+    for _,player in ipairs(Player.getPlayers()) do
+        if (player.color ~= "Grey" and player.color ~= "Black") then
+            start.players[player.steam_name] = {
+                score = 0, 
+                color = player.color
+            }
+            start.colors[player.color] = true
+        end
+    end
+
+    for _, t in ipairs(tokens) do
+        if (start.colors[t.getTags()[2]]==nil) then
+            t.destruct()
+        end
+    end
+
+    -- sets round to 1
+    start.round = 1
+
+    -- continues running startGame code
+    coroutine.resume(startGame)
+end
+
+-- return start table of data to other files
+return start
+end)
+return __bundle_require("Global.-1.lua")
