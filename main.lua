@@ -36,6 +36,8 @@ function endRound()
     -- hides end round button and shows lock in button
     self.UI.setAttribute("scoreButton", "active", false)
     self.UI.setAttribute("lockInButton", "active", true)
+    self.UI.setAttribute("claimTrickButton", "active", false)
+    self.UI.setAttribute("trashTrickButton", "active", false)
 
     -- increases the game round
     game.round = game.round + 1
@@ -259,4 +261,6 @@ function lockIn(player)
     -- says "YO HO HO" to the game and hides the lock in button
     broadcastToAll("YO HO HO")
     self.UI.setAttribute("lockInButton", "active", false)
+    self.UI.setAttribute("claimTrickButton", "active", true)
+    self.UI.setAttribute("trashTrickButton", "active", true)
 end
