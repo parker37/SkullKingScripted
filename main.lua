@@ -4,6 +4,8 @@ centerZoneGUID = "fe0fde"
 discardZoneGUID = "97cc6c"
 trickZones = {"cb2627", "370946", "c05194", "14c14e", "0c7027", "2824e8", "db3768", "abc9b2"}
 
+counters = {"31f571"}
+
 game = require("start")
 notes = require("notes")
 scores = require("scores")
@@ -161,6 +163,15 @@ function claimTrick(player)
             g[1].setRotation({snapPoint.rotation[1],snapPoint.rotation[2],0})
         end
     end
+
+    -- add 1 to counter
+    for _, c in ipairs(counters) do
+        counter = getObjectFromGUID(c)
+        if (counter.hasTag(player.color)) then
+            counter.call("onIncrementDecrementClick")
+        end
+    end
+
 
     -- checks that all players are out of cards, if they aren't, end function
     for _, hand in ipairs(hands) do

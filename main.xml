@@ -2,7 +2,7 @@
 
 <Button onClick="endRound" width="150" height="75" position="600 500 0" fontSize="26" id="scoreButton" active="false">End Round</Button>
 
-<Button onClick="claimTrick" width="100" height="50" position="925 130 0" fontSize="20" id="claimTrickButton" active="false">Claim Trick</Button>
-<Button onClick="trashTrick" width="100" height="50" position="925 70 0" fontSize="20" id="trashTrickButton" active="false">Trash Trick</Button>
+<Button onClick="claimTrick" width="100" height="50" position="850 130 0" fontSize="20" id="claimTrickButton" active="false">Claim Trick</Button>
+<Button onClick="trashTrick" width="100" height="50" position="850 70 0" fontSize="20" id="trashTrickButton" active="false">Trash Trick</Button>
 
-<Button onClick="lockIn" width="125" height="50" position="925 100 0" fontsize="22" id="lockInButton" active="false">Lock In</Button>
+<Button onClick="lockIn" width="125" height="50" position="850 100 0" fontsize="22" id="lockInButton" active="false">Lock In</Button>
